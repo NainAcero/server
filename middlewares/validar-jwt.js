@@ -45,7 +45,7 @@ const validarJWT_ADMIN = (req, res, next) => {
     try{
 
         const { usuario } = jwt.verify( token , process.env.JWT_KEY);
-        req.usuario = usuario;
+        req.usuario = (req.query.idUser != null) ? req.query.idUser: usuario;       
 
         let date_ob = new Date(ts);
         let date = date_ob.getDate();

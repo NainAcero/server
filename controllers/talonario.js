@@ -12,10 +12,21 @@ var transporter = nodemailer.createTransport({
     }
   });
 
-
 const getTalonarios_uid = async ( req, res = response ) => {
 
     const usuario_id = req.usuario.uid;
+    
+    const data = await Talonario.find({ usuario_id });
+    res.json ({
+        ok: true, 
+        data
+    });
+}
+
+const getTalonarioByIdUser = async ( req, res = response ) => {
+
+    const usuario_id = req.usuario;
+    console.log(usuario_id);
     
     const data = await Talonario.find({ usuario_id });
     res.json ({
@@ -142,5 +153,6 @@ module.exports = {
     getTalonarios_uid, 
     newTalonario,
     actualizarTalonario,
-    infoTalonario
+    infoTalonario,
+    getTalonarioByIdUser
 }

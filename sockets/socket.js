@@ -28,6 +28,11 @@ io.on('connection', client => {
 
     });
 
+    client.on('bingo_emit', ( payload ) => {
+        console.log('usuario', payload);
+        io.emit( 'bingo_response', payload );
+    });
+
     client.on('sacar_numero', ( ) => {
 
         numero = sacar_numero();
