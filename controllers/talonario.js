@@ -55,16 +55,83 @@ const newTalonario = async (req, res = response ) => {
         const talonario = new Talonario( req.body );
         await talonario.save();
 
-        var contenido = `
+        var contenido = `<html>
+        <head>
+        <meta charset="utf-8">
+        <title>Talonario</title>
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: sans-serif;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 434px;
+                position: relative;
+                margin: 0;
+                padding: 0;
+                border-collapse: collapse;
+                border: 2px solid #000;
+                table-layout: fixed;
+            }
+
+            .card td {
+                height: 80px;
+                padding: 5px;
+                border: 1px solid #000;
+                font-size: 36px;
+                vertical-align: middle;
+                text-align: center;
+                line-height: 30px;
+                font-weight: bold;
+                overflow: hidden;
+                overflow-wrap: break-word;
+            }
+
+            .card td.th {
+                font-size: 40px;
+                font-weight: bold;
+                width: 20%;
+                height: 60px;
+                border: 1px solid #000;
+                border-bottom-width: 2px;
+                line-height: 30px;
+                text-align: center;
+            }
+            
+            .card td .cellInner {
+                display: inline-block;
+                vertical-align: middle;
+                max-height: 73px;
+                width: 100%;
+                overflow-y: hidden;
+            }
+
+            .card td.free {
+                padding: 0;
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+        </head>
+        <body>
         <br>    <h1 style="text-align: center;">BINGO 2021</h1>
-        <h3 style="margin-left:15px">Nombre: ${ existeUsuario.nombre }</h3>
-        <h3 style="margin-left:15px">Email: ${ existeUsuario.email }</h3>
-        <h3 style="margin-left:15px">Teléfono: ${ existeUsuario.telefono }</h3> <br>
-        <table style="width:100%" border="1">` ;
+        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Nombre</h4><span>${existeUsuario.nombre}</span></div>
+        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Email</h4><span>${existeUsuario.email}</span></div>
+        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Teléfono</h4><span>${existeUsuario.telefono}</span></div> <br>
+        <div style="padding: 12px;padding: 12px;"><table class="card" style="margin: 0 auto;">
+        <tbody><tr><td class="th"><div class="cellInner">B</div></td><td class="th"><div class="cellInner">I</div></td><td class="th"><div class="cellInner">N</div></td><td class="th"><div class="cellInner">G</div></td><td class="th"><div class="cellInner">O</div></td></tr>` ;
 
         talonario.talonario.forEach(function(elemento) {
             if(con == 5)    contenido += "<tr>";
-            contenido += `<th>${ elemento.numero  }</th>`;
+            if(elemento.numero === 0) {
+                contenido += `<td class="box logo"><img src="https://bingo-2020.herokuapp.com/assets/free.png" width="72"></td>`;
+            }
+            else {
+                contenido += `<td class="box"><div class="cellInner">${elemento.numero}</div></td>`;
+            }
             con += 1;
             if(con == 5) {
                 contenido += "</tr>";
@@ -72,9 +139,9 @@ const newTalonario = async (req, res = response ) => {
             }   
         });
 
-        contenido += `</table>`;
-
-        await pdf.create(contenido).toFile(`./public/${ existeUsuario.email }.pdf`, function(err, res) {
+        contenido += `</tbody></table></div></body></html>`;
+        // console.log(contenido);
+        await pdf.create(contenido,{ timeout: '100000' }).toFile(`./public/${ existeUsuario.email }.pdf`, function(err, res) {
             if (err){
                 console.log(err);
             } else {
