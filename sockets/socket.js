@@ -15,7 +15,7 @@ io.on('connection', client => {
     // verificar autenticación
     if( !valido ) { return client.disconnect(); }
 
-    usuarioConectado(usuario);
+    // usuarioConectado(usuario);
 
     client.on('disconnect', ( payload ) => {
         console.log('Cliente desconectado');
@@ -33,9 +33,8 @@ io.on('connection', client => {
         io.emit( 'bingo_response', payload );
     });
 
-    client.on('sacar_numero', ( ) => {
+    client.on('sacar_numero', ( numero ) => {
 
-        numero = sacar_numero();
         console.log('BINGO ----> ', numero );
         io.emit( 'obtener_numero', numero );
 

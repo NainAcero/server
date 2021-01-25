@@ -79,7 +79,7 @@ const loginUsuario = async (req, res = response ) => {
 
 const renewToken = async ( req, res = response ) => {
 
-    const uid = req.usuario.uid;
+    const uid = req.usuario._id;
 
     const usuario = await Usuario.findById( uid );
 

@@ -3,6 +3,9 @@ const Talonario = require("../models/talonario");
 const Usuario = require("../models/usuario");
 const nodemailer = require("nodemailer");
 var pdf = require('html-pdf');
+const { v4: uuidv4 } = require('uuid');
+
+var idUser = "";
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -14,7 +17,7 @@ var transporter = nodemailer.createTransport({
 
 const getTalonarios_uid = async ( req, res = response ) => {
 
-    const usuario_id = req.usuario.uid;
+    const usuario_id = req.usuario._id;
     
     const data = await Talonario.find({ usuario_id });
     res.json ({
@@ -141,11 +144,11 @@ const newTalonario = async (req, res = response ) => {
 
         contenido += `</tbody></table></div></body></html>`;
         // console.log(contenido);
-        await pdf.create(contenido,{ timeout: '100000' }).toFile(`./public/${ existeUsuario.email }.pdf`, function(err, res) {
-            if (err){
+        idUser = uuidv4() + "-" + existeUsuario.email;
+
+        await pdf.create(contenido,{ timeout: '100000' }).toFile(`./public/${ idUser }.pdf`, function(err, res) {
+            if(err){
                 console.log(err);
-            } else {
-                console.log(res);
             }
         });
 
@@ -153,7 +156,7 @@ const newTalonario = async (req, res = response ) => {
             from: 'nain.acero24@gmail.com',
             to: existeUsuario.email,
             subject: 'bingo2021',
-            html: "<a href='https://bingo-2020.herokuapp.com/" + existeUsuario.email + ".pdf'> DESCARGAR CARTILLA</a>"
+            html: "<a href='https://bingo-2020.herokuapp.com/" + idUser + ".pdf'> DESCARGAR CARTILLA</a>"
           };
           
         transporter.sendMail(mailOptions, function(error, info){
