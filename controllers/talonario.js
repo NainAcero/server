@@ -66,24 +66,23 @@ const newTalonario = async (req, res = response ) => {
             body {
                 padding: 0;
                 margin: 0;
-                font-family: sans-serif;
+                font-family: "Trebuchet MS",sans-serif;
             }
-            
+
             .card {
                 width: 100%;
-                max-width: 434px;
                 position: relative;
                 margin: 0;
                 padding: 0;
                 border-collapse: collapse;
-                border: 2px solid #000;
+                border: 2px solid #007bff;
                 table-layout: fixed;
             }
 
             .card td {
-                height: 80px;
+                height: 76px;
                 padding: 5px;
-                border: 1px solid #000;
+                border: 1px solid #007bff;
                 font-size: 36px;
                 vertical-align: middle;
                 text-align: center;
@@ -93,21 +92,27 @@ const newTalonario = async (req, res = response ) => {
                 overflow-wrap: break-word;
             }
 
+            .card td.logo {
+                padding: 0;
+            }
+
             .card td.th {
-                font-size: 40px;
+                font-size: 36px;
                 font-weight: bold;
                 width: 20%;
-                height: 60px;
-                border: 1px solid #000;
+                height: 68px;
+                border: 1px solid#007bff;
                 border-bottom-width: 2px;
                 line-height: 30px;
                 text-align: center;
+                color: #fff;
+                background-color: #007bff;
             }
             
             .card td .cellInner {
                 display: inline-block;
                 vertical-align: middle;
-                max-height: 73px;
+                max-height: 76px;
                 width: 100%;
                 overflow-y: hidden;
             }
@@ -117,20 +122,36 @@ const newTalonario = async (req, res = response ) => {
                 text-align: center;
                 vertical-align: middle;
             }
+            .footer{
+                display: flex;
+                justify-content: space-between;
+                padding-top: 5px;
+                color: #444;
+                font-size: 15px;
+            }
+            .card-container {
+                padding: 14px;
+                max-width: 376px;
+                display: inline-block;
+            }
+            .card-box {
+                margin: 15px;
+                padding: 10px 0;
+                text-align: center;
+            }
         </style>
         </head>
         <body>
-        <br>    <h1 style="text-align: center;">BINGO 2021</h1>
-        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Nombre</h4><span>${existeUsuario.nombre}</span></div>
-        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Email</h4><span>${existeUsuario.email}</span></div>
-        <div style="padding: 12px;margin-left:55px;"><h4 style="margin: 0 0 12px 0;">Teléfono</h4><span>${existeUsuario.telefono}</span></div> <br>
-        <div style="padding: 12px;padding: 12px;"><table class="card" style="margin: 0 auto;">
+        <h1 style="text-align: center;font-size: 36px;padding: 24px;border-bottom: 1px solid #444;">BINGO 2021</h1>
+        <div class="container">
+        <div class="card-box">
+        <div class="card-container"><table class="card">
         <tbody><tr><td class="th"><div class="cellInner">B</div></td><td class="th"><div class="cellInner">I</div></td><td class="th"><div class="cellInner">N</div></td><td class="th"><div class="cellInner">G</div></td><td class="th"><div class="cellInner">O</div></td></tr>` ;
 
         talonario.talonario.forEach(function(elemento) {
             if(con == 5)    contenido += "<tr>";
             if(elemento.numero === 0) {
-                contenido += `<td class="box logo"><img src="https://bingo-2020.herokuapp.com/assets/free.png" width="72"></td>`;
+                contenido += `<td class="box logo"><img src="https://bingo-2020.herokuapp.com/assets/free.png" width="74"></td>`;
             }
             else {
                 contenido += `<td class="box"><div class="cellInner">${elemento.numero}</div></td>`;
@@ -142,8 +163,7 @@ const newTalonario = async (req, res = response ) => {
             }   
         });
 
-        contenido += `</tbody></table></div></body></html>`;
-        // console.log(contenido);
+        contenido += `</tbody></table><div class="footer"><span style="float: left;">14-02-2021</span><span><i>www.bingo-esis.web.app</i></span><span style="float: right;"><strong># 5486</strong></span></div></div></div></div></body></html>`;
         idUser = uuidv4() + "-" + existeUsuario.email;
 
         await pdf.create(contenido,{ timeout: '100000' }).toFile(`./public/${ idUser }.pdf`, function(err, res) {
